@@ -3033,48 +3033,28 @@ try {
 
 
 <style>
-#figCanvas, #figBase { display: none !important; pointer-events: none !important; } .fig { pointer-events: auto; } .loader { display: none !important; }
-body.ready .rv, .rv { opacity: 1 !important; transform: none !important; }
-body.ready .line > span, .line > span { transform: none !important; opacity: 1 !important; }
+#figCanvas, #figBase { display:none!important; pointer-events:none!important; }
+.fig { pointer-events:auto; }
+.loader { display:none!important; }
+body.ready .rv, .rv { opacity:1!important; transform:none!important; }
+body.ready .line > span, .line > span { transform:none!important; opacity:1!important; }
 
-/* Hero visual: keep the complete artwork legible and give it a little more room on the right. */
-.fig__art{clip-path:none!important}
-@media (max-width:639.98px){.fig{left:calc(50% + 12px)}}
-@media (min-width:640px) and (max-width:1023.98px){.fig{left:calc(50% + 28px)}}
-@media (min-width:1024px){.fig{right:calc(max(0px,(100% - var(--container-shell)) / 2) + var(--gut-lg) - 24px)}}
-
-/* Final hero artwork alignment: move the artwork itself, not only its wrapper. */
-.fig__art{left:calc(50% + 42px)!important;top:0!important;width:112%!important;height:82%!important;max-width:none!important;object-fit:contain!important;object-position:center center!important;transform:translateX(-50%)!important;clip-path:none!important}
-.fig__orbit{left:calc(50% + 42px)!important}
-@media (max-width:639.98px){
-  .fig__art{left:calc(50% + 18px)!important;width:108%!important;height:78%!important}
-  .fig__orbit{left:calc(50% + 18px)!important}
-}
-@media (min-width:1024px){
-  .fig__art{left:calc(50% + 30px)!important}
-  .fig__orbit{left:calc(50% + 30px)!important}
-}
-
-/* Hero artwork alignment reset: keep the full square graphic inside its visual column. */
+/* Final hero visual: restore the original hero-column placement and fit the
+   complete source artwork inside the portrait frame with visible breathing room. */
 .fig__art{
   left:50%!important;
-  top:0!important;
-  width:100%!important;
-  height:auto!important;
-  max-width:100%!important;
-  aspect-ratio:1 / 1;
+  top:4%!important;
+  width:88%!important;
+  height:68%!important;
+  max-width:none!important;
   object-fit:contain!important;
-  object-position:center center!important;
+  object-position:center!important;
   transform:translateX(-50%)!important;
   clip-path:none!important;
 }
 .fig__orbit{left:50%!important}
 @media (max-width:639.98px){
-  .fig{left:50%!important}
-  .fig__art{width:100%!important}
-}
-@media (min-width:640px) and (max-width:1023.98px){
-  .fig{left:50%!important}
+  .fig__art{width:88%!important;height:68%!important;top:4%!important}
 }
 @media (min-width:1024px){
   .fig{right:calc(max(0px,(100% - var(--container-shell)) / 2) + var(--gut-lg))!important}
@@ -3082,13 +3062,3 @@ body.ready .line > span, .line > span { transform: none !important; opacity: 1 !
 </style>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
