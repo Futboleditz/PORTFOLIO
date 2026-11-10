@@ -3039,33 +3039,33 @@ try {
 body.ready .rv, .rv { opacity:1!important; transform:none!important; }
 body.ready .line > span, .line > span { transform:none!important; opacity:1!important; }
 
-/* Hero artwork: size the wrapper to the source artwork's natural ratio.
-   The image fills that wrapper with contain, so no edge or lettering is cropped. */
+/* Hero visual: use the actual full-height right-side composition. */
 .fig{
-  width:min(520px,90vw)!important;
-  height:auto!important;
+  position:absolute!important;
+  right:0!important;
+  top:0!important;
+  left:auto!important;
+  bottom:auto!important;
+  height:100%!important;
+  width:auto!important;
   aspect-ratio:1160 / 1355!important;
-  left:50%!important;
+  max-width:55vw!important;
+  transform:none!important;
 }
+body.ready .fig{transform:none!important}
 .fig__art{
   position:absolute!important;
   inset:0!important;
   width:100%!important;
   height:100%!important;
-  display:block!important;
   object-fit:contain!important;
-  object-position:center center!important;
+  display:block!important;
   transform:none!important;
   clip-path:none!important;
+  -webkit-mask-image:radial-gradient(ellipse at center,#000 55%,transparent 100%)!important;
+  mask-image:radial-gradient(ellipse at center,#000 55%,transparent 100%)!important;
 }
 .fig__orbit{left:50%!important}
-@media (min-width:1024px){
-  .fig{
-    left:auto!important;
-    right:calc(max(0px,(100% - var(--container-shell)) / 2) + var(--gut-lg))!important;
-    bottom:var(--bar-h)!important;
-  }
-}
 </style>
 </body>
 </html>
