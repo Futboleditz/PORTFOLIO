@@ -3036,6 +3036,12 @@ try {
 #figCanvas, #figBase { display: none !important; pointer-events: none !important; } .fig { pointer-events: auto; } .loader { display: none !important; }
 body.ready .rv, .rv { opacity: 1 !important; transform: none !important; }
 body.ready .line > span, .line > span { transform: none !important; opacity: 1 !important; }
+
+/* Hero visual: keep the complete artwork legible and give it a little more room on the right. */
+.fig__art{clip-path:none!important}
+@media (max-width:639.98px){.fig{left:calc(50% + 12px)}}
+@media (min-width:640px) and (max-width:1023.98px){.fig{left:calc(50% + 28px)}}
+@media (min-width:1024px){.fig{right:calc(max(0px,(100% - var(--container-shell)) / 2) + var(--gut-lg) - 24px)}}
 </style>
 </body>
 </html>
