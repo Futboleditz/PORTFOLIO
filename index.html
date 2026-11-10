@@ -1305,7 +1305,7 @@ if(m<=2||c<=2||s)document.documentElement.classList.add('lite');})();
   <div class="modal__panel" id="mPanel">
     <button class="x-btn" id="mClose" aria-label="Close"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l16 16M20 4 4 20"/></svg></button>
     <div id="mForm">
-      <div class="mhead"><p>Hire me</p><h2 id="mTitle">Tell me what you need built.</h2><small class="qz__min">Five quick questions. Projects start at <b id="qzMin">$500</b>.</small></div>
+      <div class="mhead"><p>Hire me</p><h2 id="mTitle">Tell me what you need built.</h2><small class="qz__min">Five quick questions. Projects start at <b id="qzMin">₹5,000</b>.</small></div>
       <!-- a short questionnaire: paid projects only, with a minimum budget; anything else is turned away kindly before it is sent -->
       <form class="mform" id="reqForm" name="contact" method="POST" action="/" data-netlify="true" netlify-honeypot="company" novalidate>
         <input type="hidden" name="form-name" value="contact">
@@ -1328,13 +1328,13 @@ if(m<=2||c<=2||s)document.documentElement.classList.add('lite');})();
           <legend tabindex="-1">What's your budget for this project?</legend>
           <div class="cur" role="radiogroup" aria-label="Currency">
             <label><input type="radio" name="currency" value="USD"><span>USD $</span></label>
-            <label><input type="radio" name="currency" value="GBP"><span>GBP £</span></label>
+            <label><input type="radio" name="currency" value="EUR"><span>EUR €</span></label>
             <label><input type="radio" name="currency" value="INR"><span>INR ₹</span></label>
           </div>
-          <label class="qc"><input type="radio" name="budget" value="under"><span data-b="0">Under $500</span></label>
-          <label class="qc"><input type="radio" name="budget" value="1"><span data-b="1">$500 – $1,500</span></label>
-          <label class="qc"><input type="radio" name="budget" value="2"><span data-b="2">$1,500 – $5,000</span></label>
-          <label class="qc"><input type="radio" name="budget" value="3"><span data-b="3">$5,000 or more</span></label>
+          <label class="qc"><input type="radio" name="budget" value="1"><span data-b="0">₹5,000 – ₹10,000</span></label>
+          <label class="qc"><input type="radio" name="budget" value="2"><span data-b="1">₹10,000 – ₹20,000</span></label>
+          <label class="qc"><input type="radio" name="budget" value="3"><span data-b="2">₹20,000 – ₹40,000</span></label>
+          <label class="qc"><input type="radio" name="budget" value="4"><span data-b="3">₹40,000 or more</span></label>
         </fieldset>
 
         <fieldset class="qz" data-step="3" hidden>
@@ -1555,12 +1555,13 @@ $('#mDone').addEventListener('click', closeModal);
 const FORM_LIVE = /(^|\.)arghya.*\.app$|\.vercel\.app$|\.netlify\.app$/.test(location.hostname);
 const SEND_LABEL = FORM_LIVE ? 'Send enquiry' : 'Write the email';
 
-// ── the questionnaire: one question at a time; only paid projects at or above the minimum get through ──
+// ── the questionnaire: one question at a time; the four budget ranges are all available ──
 const STEPS = 5;
 const BUDGETS = {
-  USD: ['$500', 'Under $500', '$500 – $1,500', '$1,500 – $5,000', '$5,000 or more'],
-  GBP: ['£400', 'Under £400', '£400 – £1,200', '£1,200 – £4,000', '£4,000 or more'],
-  INR: ['₹45,000', 'Under ₹45,000', '₹45,000 – ₹1.25 lakh', '₹1.25 – ₹4 lakh', '₹4 lakh or more'],
+  // USD/EUR equivalents are rounded from the 9 Nov 2026 FBIL reference rates.
+  USD: ['$53', '$53 – $107', '$107 – $213', '$213 – $426', '$426 or more'],
+  EUR: ['€48', '€48 – €95', '€95 – €191', '€191 – €382', '€382 or more'],
+  INR: ['₹5,000', '₹5,000 – ₹10,000', '₹10,000 – ₹20,000', '₹20,000 – ₹40,000', '₹40,000 or more'],
 };
 const CUR0 = (() => { try { const z = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
   return /Calcutta|Kolkata/.test(z) ? 'INR' : /^Europe\/(London|Belfast|Guernsey|Jersey|Isle_of_Man)/.test(z) ? 'GBP' : 'USD'; } catch (e) { return 'USD'; } })();
@@ -1595,11 +1596,7 @@ function qzCheck(){
     if (d.get('service') === 'question'){ qzStop('This form is for hiring me',
       'I keep it for paid client projects, so I can’t answer questions about how this site was made or general advice here. Thanks for stopping by, and for the interest in the work.', 1); return false; }
   }
-  if (step === 2){
-    if (!d.get('budget')) return $('#qzErr').textContent = 'Choose a budget range.', false;
-    if (d.get('budget') === 'under'){ qzStop('My projects start at ' + BUDGETS[d.get('currency')][0],
-      'That’s the smallest budget I can do good work for. If your budget changes, I’d be glad to hear from you then.', 2); return false; }
-  }
+  if (step === 2 && !d.get('budget')) return $('#qzErr').textContent = 'Choose a budget range.', false;
   if (step === 3 && !d.get('timeline')) return $('#qzErr').textContent = 'Choose when you’d like to start.', false;
   if (step === 4 && !d.get('client_type')) return $('#qzErr').textContent = 'Choose who the project is for.', false;
   if (step === 5){
@@ -1615,10 +1612,11 @@ function qzCheck(){
 }
 setCur(CUR0); qzGo(1);
 form.querySelectorAll('input[name=currency]').forEach(r => r.addEventListener('change', () => setCur(r.value)));
-// a choice moves straight on to the next question
+// most choices move straight on; budget stays visible so visitors can compare all four ranges before continuing
 form.addEventListener('change', e => {
   const n = e.target.name;
-  if (!['service', 'budget', 'timeline', 'client_type'].includes(n)) return;
+  if (n === 'budget') return;
+  if (!['service', 'timeline', 'client_type'].includes(n)) return;
   if (lastInput !== 'mouse') return;   // arrow keys move between choices; keyboard users go on with Enter
   setTimeout(() => { if (qzCheck()) qzGo(step + 1, true); }, 180);
 });
@@ -1631,9 +1629,9 @@ form.addEventListener('submit', e => {
   if (!qzCheck()) return;
   if (step < STEPS){ qzGo(step + 1, true); return; }
   const g = k => (new FormData(form).get(k) || '').toString().trim();
-  const cur = g('currency'), tier = +g('budget'), budget = BUDGETS[cur][tier + 1];
-  // a quick read on the lead for my inbox: strong budget, a real business and a near start come first
-  const fit = (tier >= 2 ? 2 : 1) + (g('client_type') === 'Personal project' ? 0 : 1) + (g('timeline') === 'Just exploring' ? 0 : 1);
+  const cur = g('currency'), tier = +g('budget'), budget = BUDGETS[cur][tier];
+  // a quick read on the lead for my inbox: stronger budget, a real business and a near start come first
+  const fit = (tier >= 3 ? 2 : 1) + (g('client_type') === 'Personal project' ? 0 : 1) + (g('timeline') === 'Just exploring' ? 0 : 1);
   const grade = fit >= 4 ? 'A' : fit === 3 ? 'B' : 'C';
   $('#f-fit').value = grade; $('#f-budget-label').value = budget;
   $('#f-subject').value = `[${grade}] ${g('service')} · ${budget} · ${g('name')}`;
