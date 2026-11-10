@@ -3039,25 +3039,32 @@ try {
 body.ready .rv, .rv { opacity:1!important; transform:none!important; }
 body.ready .line > span, .line > span { transform:none!important; opacity:1!important; }
 
-/* Final hero visual: restore the original hero-column placement and fit the
-   complete source artwork inside the portrait frame with visible breathing room. */
-.fig__art{
+/* Hero artwork: size the wrapper to the source artwork's natural ratio.
+   The image fills that wrapper with contain, so no edge or lettering is cropped. */
+.fig{
+  width:min(520px,90vw)!important;
+  height:auto!important;
+  aspect-ratio:1160 / 1355!important;
   left:50%!important;
-  top:4%!important;
-  width:88%!important;
-  height:68%!important;
-  max-width:none!important;
+}
+.fig__art{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  display:block!important;
   object-fit:contain!important;
-  object-position:center!important;
-  transform:translateX(-50%)!important;
+  object-position:center center!important;
+  transform:none!important;
   clip-path:none!important;
 }
 .fig__orbit{left:50%!important}
-@media (max-width:639.98px){
-  .fig__art{width:88%!important;height:68%!important;top:4%!important}
-}
 @media (min-width:1024px){
-  .fig{right:calc(max(0px,(100% - var(--container-shell)) / 2) + var(--gut-lg))!important}
+  .fig{
+    left:auto!important;
+    right:calc(max(0px,(100% - var(--container-shell)) / 2) + var(--gut-lg))!important;
+    bottom:var(--bar-h)!important;
+  }
 }
 </style>
 </body>
