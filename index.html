@@ -2801,12 +2801,12 @@ try { window.dispatchEvent(new Event('intro:ready')); } catch(e) {}
   const n = navigator;
   // the ThreeUI card is the card, on every device. It may take a moment to load, and it is allowed to.
   // The layered CSS card below is kept for one case only: a browser with no WebGL at all, or an engine that fails outright.
-  const hasGL = (() => { try { const c = document.createElement('canvas'); return !!(c.getContext('webgl2') || c.getContext('webgl')); } catch (e) { return false; } })();
-  let frame = null, back = null, timer = 0, isOpen = false, useLite = !hasGL, liteReady = null, openT = 0, handing = false;
+  // The standalone WebGL viewer used to load from /ability-card/, but that route is not part of this deployment.
+  // Use the self-contained CSS 3D card directly so it opens immediately on every device.
+  let frame = null, back = null, timer = 0, isOpen = false, useLite = true, liteReady = null, openT = 0, handing = false;
   const progress = p => { ld.style.setProperty('--p', p); pct.textContent = Math.round(p * 100) + '%'; };
   // the light card's faces, decoded before it is shown so it never appears half-drawn
-  // the faces are marked lazy so their weight never lands on a visit that gets the 3D card;
-  // asking for them switches them on and waits for them to decode
+  // Decode the self-contained card artwork before revealing it, avoiding a half-drawn first frame.
   const decodeLite = () => liteReady || (liteReady = Promise.all([...lite.querySelectorAll('img')].map(im => {
     im.loading = 'eager';
     return im.decode ? im.decode().catch(() => {}) : Promise.resolve();
@@ -2825,7 +2825,7 @@ try { window.dispatchEvent(new Event('intro:ready')); } catch(e) {}
         hc.classList.remove('flip', 'live'); spin(true);
         setTimeout(() => { if (frame){ frame.remove(); frame = null; } }, 520);   // the 3D card leaves only once the light one covers it
         setTimeout(() => hc.focus({ preventScroll: true }), 360);
-      }, Math.max(300, 950 - (performance.now() - openT)));   // the outline finishes drawing before the card replaces it
+      }, Math.max(80, 220 - (performance.now() - openT)));   // keep the hand-off brief once the card artwork is decoded
     });
   }
   function show(){
