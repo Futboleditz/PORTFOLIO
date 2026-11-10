@@ -178,6 +178,23 @@ html[data-mode="dark"] .hero::before{opacity:1}
 .fig{position:absolute;bottom:var(--bar-h);left:50%;height:var(--fig-h);aspect-ratio:801/1033;
   opacity:0;transition:opacity 1.1s var(--e-soft) 120ms,transform 1.3s var(--e-soft) 120ms;transform:translate(-50%,2.5rem)}
 body.ready .fig{opacity:1;transform:translate(-50%,0)}
+/* ---------- holographic core: a portrait-free visual for the hero ---------- */
+.fig::before{content:"";position:absolute;left:50%;top:39%;width:72%;aspect-ratio:1;translate:-50% -50%;z-index:0;pointer-events:none;
+  border-radius:50%;background:radial-gradient(circle,rgba(196,176,176,.16) 0%,rgba(196,176,176,.07) 38%,transparent 72%);filter:blur(18px)}
+.fig__orbit{position:absolute;left:50%;top:39%;width:96%;height:31%;z-index:1;pointer-events:none;border:1px solid rgba(196,176,176,.3);
+  border-left-color:rgba(214,180,140,.62);border-right-color:rgba(196,176,176,.14);border-radius:50%;
+  transform:translate(-50%,-50%) rotate(-24deg);box-shadow:0 0 22px rgba(196,176,176,.07)}
+.fig__orbit--two{width:82%;height:42%;border-color:rgba(214,180,140,.25);border-top-color:rgba(214,180,140,.55);
+  transform:translate(-50%,-50%) rotate(34deg);animation:figOrbitTurn 32s linear infinite}
+.fig__art{position:absolute;left:50%;top:1%;z-index:2;display:block;width:100%;height:77%;object-fit:contain;
+  transform:translateX(-50%);clip-path:circle(47% at 50% 50%);mix-blend-mode:screen;pointer-events:none;user-select:none;
+  filter:drop-shadow(0 1.25rem 1.8rem rgba(0,0,0,.24));animation:figCoreFloat 7s ease-in-out infinite}
+@keyframes figOrbitTurn{from{transform:translate(-50%,-50%) rotate(34deg)}to{transform:translate(-50%,-50%) rotate(394deg)}}
+@keyframes figCoreFloat{0%,100%{translate:0 0}50%{translate:0 -6px}}
+@media (prefers-reduced-motion:reduce){.fig__orbit--two,.fig__art{animation:none!important}}
+@media (min-width:1024px){.fig__art{height:79%;top:0}.fig__orbit{top:40%}}
+@media (max-width:639.98px){.fig__art{height:76%;top:1.5%}.fig__orbit{top:39%;width:92%}}
+@media (min-width:640px) and (max-width:1023.98px){.fig__art{height:77%;top:1%}}
 @media (min-width:1024px){
   .fig{height:min(calc(100% - var(--bar-h) - 6rem),58rem,calc((min(100vw,var(--container-shell)) - 2 * var(--gut-lg)) * .44 * 1033 / 801));left:auto;right:calc(max(0px,(100% - var(--container-shell)) / 2) + var(--gut-lg));transform:translateY(2.5rem)}
   body.ready .fig{transform:none}
@@ -1039,7 +1056,10 @@ if(m<=2||c<=2||s)document.documentElement.classList.add('lite');})();
 
     <div class="hero__stage">
       <div class="fig" id="fig">
-        <img id="figBase" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="display:none!important;" alt="" decoding="async" fetchpriority="high" aria-hidden="true">
+        <img class="fig__art" src="/images/portfolio-holographic-core.webp" alt="" aria-hidden="true" decoding="async" fetchpriority="high">
+        <span class="fig__orbit fig__orbit--one" aria-hidden="true"></span>
+        <span class="fig__orbit fig__orbit--two" aria-hidden="true"></span>
+        <img id="figBase" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="display:none!important;" alt="" decoding="async" aria-hidden="true">
         <canvas id="figCanvas" aria-hidden="true"></canvas>
         <button class="fig__card" id="holoOpen" aria-haspopup="dialog" aria-controls="holo">My ability card</button>
       </div>
