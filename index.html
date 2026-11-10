@@ -3054,6 +3054,31 @@ body.ready .line > span, .line > span { transform: none !important; opacity: 1 !
   .fig__art{left:calc(50% + 30px)!important}
   .fig__orbit{left:calc(50% + 30px)!important}
 }
+
+/* Hero artwork alignment reset: keep the full square graphic inside its visual column. */
+.fig__art{
+  left:50%!important;
+  top:0!important;
+  width:100%!important;
+  height:auto!important;
+  max-width:100%!important;
+  aspect-ratio:1 / 1;
+  object-fit:contain!important;
+  object-position:center center!important;
+  transform:translateX(-50%)!important;
+  clip-path:none!important;
+}
+.fig__orbit{left:50%!important}
+@media (max-width:639.98px){
+  .fig{left:50%!important}
+  .fig__art{width:100%!important}
+}
+@media (min-width:640px) and (max-width:1023.98px){
+  .fig{left:50%!important}
+}
+@media (min-width:1024px){
+  .fig{right:calc(max(0px,(100% - var(--container-shell)) / 2) + var(--gut-lg))!important}
+}
 </style>
 </body>
 </html>
