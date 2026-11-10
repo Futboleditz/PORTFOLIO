@@ -3042,6 +3042,18 @@ body.ready .line > span, .line > span { transform: none !important; opacity: 1 !
 @media (max-width:639.98px){.fig{left:calc(50% + 12px)}}
 @media (min-width:640px) and (max-width:1023.98px){.fig{left:calc(50% + 28px)}}
 @media (min-width:1024px){.fig{right:calc(max(0px,(100% - var(--container-shell)) / 2) + var(--gut-lg) - 24px)}}
+
+/* Final hero artwork alignment: move the artwork itself, not only its wrapper. */
+.fig__art{left:calc(50% + 42px)!important;top:0!important;width:112%!important;height:82%!important;max-width:none!important;object-fit:contain!important;object-position:center center!important;transform:translateX(-50%)!important;clip-path:none!important}
+.fig__orbit{left:calc(50% + 42px)!important}
+@media (max-width:639.98px){
+  .fig__art{left:calc(50% + 18px)!important;width:108%!important;height:78%!important}
+  .fig__orbit{left:calc(50% + 18px)!important}
+}
+@media (min-width:1024px){
+  .fig__art{left:calc(50% + 30px)!important}
+  .fig__orbit{left:calc(50% + 30px)!important}
+}
 </style>
 </body>
 </html>
