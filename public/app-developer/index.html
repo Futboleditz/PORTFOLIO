@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en" data-mode="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>App Development — Smart Day Planner | Arghya Ghosh</title>
+<link rel="preload" href="/fonts/onest-latin.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:'Onest';font-style:normal;font-display:swap;font-weight:100 900;src:url(/fonts/onest-latin.woff2) format('woff2');}
+:root{
+  --bg:#E8E4E0; --fg:#1A1818; --muted:#7E7272; --line:#D5CDCA;
+  --surface:#FFFFFF; --surface2:#F4EFEA; --accent:#4a3540;
+  --pill:rgba(26,24,24,.06); --pill-hover:rgba(26,24,24,.12);
+  --btn-bg:#1A1818; --btn-fg:#FFFFFF;
+  --card-bg:#FAF7F4; --card-border:rgba(0,0,0,.08); --card-shadow:0 1.5rem 3.5rem rgba(0,0,0,.08);
+}
+html[data-mode="dark"]{
+  --bg:#1A1818; --fg:#E8E4E0; --muted:#A09292; --line:rgba(196,176,176,.15);
+  --surface:#252121; --surface2:#1F1C1C; --accent:#C4A1B5;
+  --pill:rgba(196,176,176,.08); --pill-hover:rgba(196,176,176,.16);
+  --btn-bg:#E8E4E0; --btn-fg:#1A1818;
+  --card-bg:#231F1F; --card-border:rgba(255,255,255,.08); --card-shadow:0 1.5rem 3.5rem rgba(0,0,0,.45);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scrollbar-width:none;}
+html::-webkit-scrollbar{display:none;}
+body{
+  background:var(--bg); color:var(--fg); font-family:'Onest',ui-sans-serif,system-ui,sans-serif;
+  line-height:1.6; min-height:100vh; overflow-x:hidden;
+  transition:background .35s ease, color .35s ease;
+}
+
+/* Floating frosted header strip */
+.nav-wrap{
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+  background:color-mix(in srgb, var(--bg) 75%, transparent);
+  border-bottom:1px solid var(--line);
+}
+.nav-inner{
+  max-width:82rem; margin:0 auto; padding:.9rem 1.5rem;
+  display:flex; justify-content:space-between; align-items:center;
+}
+.pill-btn{
+  background:var(--pill); color:var(--fg); border:1px solid var(--line);
+  padding:.5rem 1.25rem; border-radius:9999px; font-size:.84rem; font-weight:600;
+  cursor:pointer; display:inline-flex; align-items:center; gap:.5rem; text-decoration:none;
+  transition:background .2s, transform .2s, border-color .2s;
+}
+.pill-btn:hover{background:var(--pill-hover);transform:translateX(-2px);}
+.pill-btn--primary{
+  background:var(--btn-bg); color:var(--btn-fg); border-color:transparent;
+  box-shadow:0 4px 14px rgba(0,0,0,.15);
+}
+.pill-btn--primary:hover{transform:translateY(-1px);background:var(--btn-bg);opacity:.92;}
+
+/* Main container */
+.container{
+  max-width:82rem; margin:0 auto; padding:6.5rem 1.5rem 5rem;
+}
+
+.category-eyebrow{
+  display:inline-flex; align-items:center; gap:.55rem;
+  font-family:ui-monospace,Menlo,monospace; font-size:.75rem; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--muted); font-weight:600; margin-bottom:.8rem;
+}
+.category-eyebrow::before{
+  content:""; width:7px; height:7px; border-radius:50%; background:#9B5DE5;
+}
+.category-h1{
+  font-size:clamp(2.75rem,7vw,5.5rem); font-weight:800; line-height:1.02; letter-spacing:-.035em;
+  margin-bottom:1.25rem; color:var(--fg);
+}
+.category-desc{
+  font-size:clamp(1.1rem,2vw,1.4rem); color:var(--muted); max-width:52rem;
+  line-height:1.55; margin-bottom:3.5rem; font-weight:400;
+}
+
+.cards-stack{display:flex; flex-direction:column; gap:3rem; position:relative;}
+.project-card{
+  position:sticky; top:5.5rem;
+  background:var(--card-bg); border:1px solid var(--card-border);
+  border-radius:2.5rem; padding:clamp(2rem,5vw,3.75rem);
+  box-shadow:var(--card-shadow);
+  transition:transform .3s ease, filter .3s ease;
+}
+
+.card-hero{
+  display:grid; grid-template-columns:1.15fr .85fr; gap:3rem; align-items:center;
+}
+@media (max-width:960px){
+  .card-hero{grid-template-columns:1fr; gap:2.5rem;}
+}
+
+.project-tagline{
+  font-family:ui-monospace,Menlo,monospace; font-size:.78rem; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--accent); font-weight:700; margin-bottom:.75rem;
+  display:block;
+}
+.project-title{
+  font-size:clamp(2.2rem,4vw,3.5rem); font-weight:800; line-height:1.08; letter-spacing:-.025em;
+  margin-bottom:1rem;
+}
+.project-summary{
+  font-size:1.05rem; color:var(--muted); line-height:1.65; margin-bottom:2rem;
+}
+
+/* Phone Mockup */
+.mockup-phone{
+  background:#141212; border-radius:2.2rem; border:2px solid rgba(255,255,255,.12);
+  overflow:hidden; box-shadow:0 1.5rem 3rem rgba(0,0,0,.35); max-width:320px; margin:0 auto;
+}
+.phone-bar{
+  background:#1F1C1C; padding:.5rem .9rem; display:flex; justify-content:space-between; align-items:center;
+  font-family:ui-monospace,Menlo,monospace; font-size:.65rem; color:#A09292;
+}
+.phone-notch{width:70px; height:12px; background:#000; border-radius:0 0 10px 10px;}
+.phone-screen{
+  padding:1.4rem; color:#FFFFFF; background:radial-gradient(circle at 50% 10%, #382433, #0D0A0C 85%);
+}
+.app-card-item{
+  background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08); border-radius:.85rem;
+  padding:.8rem .9rem; margin-bottom:.75rem;
+}
+.app-card-title{font-size:.85rem; font-weight:700; color:#F8FAFC;}
+.app-card-desc{font-size:.7rem; color:#94A3B8;}
+
+.tag-pills{display:flex; flex-wrap:wrap; gap:.5rem; margin-bottom:2.2rem;}
+.tag-chip{
+  background:var(--surface2); border:1px solid var(--line); border-radius:9999px;
+  padding:.35rem .85rem; font-size:.75rem; color:var(--muted); font-weight:500;
+}
+.cta-group{display:flex; gap:1rem; flex-wrap:wrap; align-items:center;}
+
+.feature-cols{
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:1.75rem; margin-top:2.5rem;
+  border-top:1px solid var(--line); padding-top:2.5rem;
+}
+.feature-item h4{font-size:1.15rem; font-weight:700; margin-bottom:.5rem; color:var(--fg);}
+.feature-item p{font-size:.9rem; color:var(--muted); line-height:1.6;}
+
+.footer-return{
+  margin-top:5rem; text-align:center; padding:3rem 1.5rem; border-top:1px solid var(--line);
+}
+.footer-return p{color:var(--muted); margin-bottom:1.5rem; font-size:1.05rem;}
+</style>
+</head>
+<body>
+
+<header class="nav-wrap">
+  <div class="nav-inner">
+    <button class="pill-btn" onclick="backToDoors()">
+      <span>←</span> Back to the doors
+    </button>
+    <button class="pill-btn pill-btn--primary" onclick="backToDoors()">
+      ← Return to hallway
+    </button>
+  </div>
+</header>
+
+<main class="container">
+  <div class="category-eyebrow">Service &amp; Selected Project 02</div>
+  <h1 class="category-h1">App Development</h1>
+  <p class="category-desc">
+    Native mobile utilities, group decision engines, and smooth interactive mobile experiences built with fluid responsiveness and offline-friendly logic.
+  </p>
+
+  <div class="cards-stack">
+    <article class="project-card">
+      <div class="card-hero">
+        <div>
+          <span class="project-tagline">Featured Project · Travel &amp; Group Dynamics</span>
+          <h2 class="project-title">Smart Day Planner</h2>
+          <p class="project-summary">
+            A frictionless day-plan generator built around real group dynamics. Input your group size, location, budget per head, available time window, and mood &mdash; getting a balanced, ready-to-go itinerary instantly without endless group chat indecision.
+          </p>
+
+          <div class="tag-pills">
+            <span class="tag-chip">Mobile UX</span>
+            <span class="tag-chip">Constraint Algorithms</span>
+            <span class="tag-chip">Multi-Variable Filtering</span>
+            <span class="tag-chip">Timeline Generator</span>
+            <span class="tag-chip">Offline Ready</span>
+          </div>
+
+          <div class="cta-group">
+            <button class="pill-btn pill-btn--primary" onclick="backToDoors()" style="padding:.75rem 1.75rem;">
+              ← Back to doors
+            </button>
+          </div>
+        </div>
+
+        <div class="mockup-phone" aria-label="Smart Day Planner mobile screen preview">
+          <div class="phone-bar">
+            <span>9:41</span>
+            <div class="phone-notch"></div>
+            <span>100%</span>
+          </div>
+          <div class="phone-screen">
+            <div style="font-size:.78rem; text-transform:uppercase; letter-spacing:.08em; color:#C4A1B5; margin-bottom:.4rem;">Today's Plan</div>
+            <div style="font-size:1.1rem; font-weight:800; margin-bottom:1rem;">Weekend Coffee &amp; Heritage Walk</div>
+            <div class="app-card-item">
+              <div class="app-card-title">10:00 AM · Artisan Roastery</div>
+              <div class="app-card-desc">Budget: ₹350/person · 4 seats reserved</div>
+            </div>
+            <div class="app-card-item">
+              <div class="app-card-title">11:30 AM · Old Fort Quarter</div>
+              <div class="app-card-desc">Free walking route · 1.8 km flat walk</div>
+            </div>
+            <div class="app-card-item">
+              <div class="app-card-title">01:30 PM · Courtyard Bistro</div>
+              <div class="app-card-desc">Outdoor seating · Rating 4.8★</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="feature-cols">
+        <div class="feature-item">
+          <h4>01 / Constraint Engine</h4>
+          <p>Balances budget thresholds, open hours, and geographic walking distances into an optimal chronological sequence.</p>
+        </div>
+        <div class="feature-item">
+          <h4>02 / Group Consensus</h4>
+          <p>Share a plan link for quick thumbs up/down polling to lock in itineraries without endless back-and-forth debate.</p>
+        </div>
+        <div class="feature-item">
+          <h4>03 / Frictionless UX</h4>
+          <p>Zero login required to generate plans; smooth swipeable cards with rapid re-roll alternatives for any itinerary stop.</p>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <div class="footer-return">
+    <p>Explore more behind the other doors</p>
+    <button class="pill-btn" onclick="backToDoors()" style="padding:.75rem 2rem; font-size:.92rem;">
+      ← Return to the Hall of Doors
+    </button>
+  </div>
+</main>
+
+<script>
+function backToDoors(){
+  if (window.parent && window.parent !== window){
+    window.parent.postMessage({wall:'close'}, '*');
+  } else {
+    location.href = '/#works';
+  }
+}
+window.addEventListener('message', e => {
+  if (e.data?.wall === 'mode') document.documentElement.dataset.mode = e.data.mode;
+});
+try {
+  const pMode = window.parent.document.documentElement.dataset.mode;
+  if (pMode) document.documentElement.dataset.mode = pMode;
+} catch (e) {}
+</script>
+</body>
+</html>
