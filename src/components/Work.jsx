@@ -29,7 +29,7 @@ const projects = [
     highlights: ['Multi-variable filtering engine', 'Dynamic itinerary timeline', 'Mobile-first responsive flow'],
     tags: ['Product Design', 'State Machine', 'QA Testing', 'UX Flow'],
     status: 'Demo Available',
-    link: '#',
+    link: 'https://what-should-we-do-final.vercel.app/',
     shape: 'icosa',
   },
   {
